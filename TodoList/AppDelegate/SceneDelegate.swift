@@ -14,11 +14,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         
-        guard let scene = (scene as? UIWindowScene) else { return }
+        guard let windowScene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: windowScene)
+        window?.frame = windowScene.coordinateSpace.bounds
         
-        window = UIWindow(windowScene: scene)
-        window?.frame = scene.coordinateSpace.bounds
-        let homeController = TDLHomeController()
+        let homeController = TDLBaseNavController(rootViewController: TDLHomeController())
+        
         window?.rootViewController = homeController
         window?.makeKeyAndVisible()
     }

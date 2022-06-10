@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7140ED62285342680085B46E /* TDLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7140ED61285342680085B46E /* TDLConst.swift */; };
 		715DC7D22852056000A5DAAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7D12852056000A5DAAF /* AppDelegate.swift */; };
 		715DC7D42852056000A5DAAF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7D32852056000A5DAAF /* SceneDelegate.swift */; };
 		715DC7DB2852056100A5DAAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 715DC7DA2852056100A5DAAF /* Assets.xcassets */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7140ED61285342680085B46E /* TDLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLConst.swift; sourceTree = "<group>"; };
 		715DC7CE2852056000A5DAAF /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		715DC7D12852056000A5DAAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		715DC7D32852056000A5DAAF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		715DC7ED28520B3800A5DAAF /* Define */ = {
 			isa = PBXGroup;
 			children = (
+				7140ED61285342680085B46E /* TDLConst.swift */,
 			);
 			path = Define;
 			sourceTree = "<group>";
@@ -193,6 +196,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				715DC7EA28520AF900A5DAAF /* TDLBaseViewController.swift in Sources */,
+				7140ED62285342680085B46E /* TDLConst.swift in Sources */,
 				715DC7EC28520B1700A5DAAF /* TDLBaseTVController.swift in Sources */,
 				715DC7D22852056000A5DAAF /* AppDelegate.swift in Sources */,
 				715DC7F32852F11100A5DAAF /* TDLBaseNavController.swift in Sources */,

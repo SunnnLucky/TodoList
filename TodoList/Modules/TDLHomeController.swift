@@ -9,12 +9,20 @@ import UIKit
 
 class TDLHomeController: TDLBaseTVController {
     
-    let itemArray = ["Find Mike", "Buy Eggos", "Destory Demogorago"]
+    var itemArray : [String] = []
+    
+    let defaults = UserDefaults.standard
     let cellID = "HomeCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         title = "Todoey"
+        
+        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [String] {
+            itemArray = tempArray
+        }
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
@@ -26,8 +34,16 @@ class TDLHomeController: TDLBaseTVController {
     //MARK: - Add New Items
     @objc func addButtonPressed() {
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        alert.addTextField { textField in
+            textField.placeholder = "Creat new item"
+        }
+        
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
-            
+            guard let text = alert.textFields?.first?.text else {return}
+            self.itemArray.append(text)
+            self.defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
+            self.defaults.synchronize()
+            self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)

@@ -9,7 +9,7 @@ import UIKit
 
 class TDLHomeController: TDLBaseTVController {
     
-    var itemArray : [String] = []
+    var itemArray : [TDLTodoListModel] = []
     
     let defaults = UserDefaults.standard
     let cellID = "HomeCellID"
@@ -19,7 +19,7 @@ class TDLHomeController: TDLBaseTVController {
         
         title = "Todoey"
         
-        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [String] {
+        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [TDLTodoListModel] {
             itemArray = tempArray
         }
         
@@ -31,6 +31,12 @@ class TDLHomeController: TDLBaseTVController {
         navigationItem.rightBarButtonItem = rightBtn
     }
     
+    //MARK: - Save Data
+    func saveData() {
+        defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
+        defaults.synchronize()
+    }
+    
     //MARK: - Add New Items
     @objc func addButtonPressed() {
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
@@ -40,9 +46,9 @@ class TDLHomeController: TDLBaseTVController {
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
-            self.itemArray.append(text)
-            self.defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
-            self.defaults.synchronize()
+            let model = TDLTodoListModel(text, false)
+            self.itemArray.append(model)
+//            self.saveData()
             self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -64,14 +70,22 @@ extension TDLHomeController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-        cell.textLabel?.text = itemArray[indexPath.row]
+        
+        let model = itemArray[indexPath.row]
+        cell.textLabel?.text = model.text
+        cell.accessoryType = model.isSelect ? .checkmark : .none
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
-        cell.accessoryType = cell.accessoryType == .checkmark ? .none : .checkmark
+        
+        let isSelect = cell.accessoryType == .checkmark ? true : false
+        
+        cell.accessoryType = isSelect ? .none : .checkmark
+        itemArray[indexPath.row].isSelect = !isSelect
+//        saveData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }

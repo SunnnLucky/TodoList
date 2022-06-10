@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7140ED62285342680085B46E /* TDLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7140ED61285342680085B46E /* TDLConst.swift */; };
+		7140ED6728536E8B0085B46E /* TDLTodoListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7140ED6628536E8B0085B46E /* TDLTodoListModel.swift */; };
 		715DC7D22852056000A5DAAF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7D12852056000A5DAAF /* AppDelegate.swift */; };
 		715DC7D42852056000A5DAAF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7D32852056000A5DAAF /* SceneDelegate.swift */; };
 		715DC7DB2852056100A5DAAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 715DC7DA2852056100A5DAAF /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 
 /* Begin PBXFileReference section */
 		7140ED61285342680085B46E /* TDLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLConst.swift; sourceTree = "<group>"; };
+		7140ED6628536E8B0085B46E /* TDLTodoListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLTodoListModel.swift; sourceTree = "<group>"; };
 		715DC7CE2852056000A5DAAF /* TodoList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TodoList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		715DC7D12852056000A5DAAF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		715DC7D32852056000A5DAAF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,6 +45,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7140ED6328536E620085B46E /* Data Model */ = {
+			isa = PBXGroup;
+			children = (
+				7140ED6628536E8B0085B46E /* TDLTodoListModel.swift */,
+			);
+			path = "Data Model";
+			sourceTree = "<group>";
+		};
+		7140ED6428536E6B0085B46E /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7140ED6528536E700085B46E /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				715DC7E52852084E00A5DAAF /* TDLHomeController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 		715DC7C52852056000A5DAAF = {
 			isa = PBXGroup;
 			children = (
@@ -109,7 +134,9 @@
 		715DC7EF28520B5B00A5DAAF /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				715DC7E52852084E00A5DAAF /* TDLHomeController.swift */,
+				7140ED6528536E700085B46E /* Controller */,
+				7140ED6428536E6B0085B46E /* View */,
+				7140ED6328536E620085B46E /* Data Model */,
 			);
 			path = Modules;
 			sourceTree = "<group>";
@@ -195,6 +222,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7140ED6728536E8B0085B46E /* TDLTodoListModel.swift in Sources */,
 				715DC7EA28520AF900A5DAAF /* TDLBaseViewController.swift in Sources */,
 				7140ED62285342680085B46E /* TDLConst.swift in Sources */,
 				715DC7EC28520B1700A5DAAF /* TDLBaseTVController.swift in Sources */,

@@ -6,13 +6,14 @@
 //
 
 import UIKit
+import CoreData
 
 class TDLHomeController: TDLBaseTVController {
     
-    var itemArray : [TDLTodoListModel] = []
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var itemArray : [TodoList] = []
     
-    //let defaults = UserDefaults.standard
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let cellID = "HomeCellID"
     
     override func viewDidLoad() {
@@ -20,10 +21,6 @@ class TDLHomeController: TDLBaseTVController {
         
         title = "Todoey"
         loadTodoList()
-        
-//        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [TDLTodoListModel] {
-//            itemArray = tempArray
-//        }
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
@@ -35,29 +32,35 @@ class TDLHomeController: TDLBaseTVController {
     
     //MARK: - Save Data
     func saveTodoListData() {
-        
-        let encoder = PropertyListEncoder()
+        // let encoder = PropertyListEncoder()
         do {
-            let data = try encoder.encode(itemArray)
-            guard let url = dataFilePath else {return}
-            try data.write(to: url)
+            //let data = try encoder.encode(itemArray)
+            //guard let url = dataFilePath else {return}
+            //try data.write(to: url)
+            try context.save()
         } catch {
-            TDLLog("encoder fail \(error)")
+            TDLLog("Error saving context \(error)")
         }
-        
-        //defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
-        //defaults.synchronize()
     }
     
     func loadTodoList() {
+        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            TDLLog("Error fetching data from context \(error)")
+        }
+        
+        /*
         guard let url = dataFilePath else {return}
         guard let data = try? Data(contentsOf: url) else {return}
         let decoder = PropertyListDecoder()
         do {
-            itemArray = try decoder.decode([TDLTodoListModel].self, from: data)
+            itemArray = try decoder.decode([TodoList].self, from: data)
         } catch {
             TDLLog("decoder fail \(error)")
         }
+         */
     }
     
     //MARK: - Add New Items
@@ -69,7 +72,10 @@ class TDLHomeController: TDLBaseTVController {
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
-            let model = TDLTodoListModel(text, false)
+            let model = TodoList(context: self.context)
+            model.text = text
+            model.isSelect = false
+            
             self.itemArray.append(model)
             self.saveTodoListData()
             self.tableView.reloadData()

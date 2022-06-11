@@ -11,17 +11,19 @@ class TDLHomeController: TDLBaseTVController {
     
     var itemArray : [TDLTodoListModel] = []
     
-    let defaults = UserDefaults.standard
+    //let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let cellID = "HomeCellID"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Todoey"
+        loadTodoList()
         
-        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [TDLTodoListModel] {
-            itemArray = tempArray
-        }
+//        if let tempArray = self.defaults.array(forKey: TDLConst.kTodoListArray) as? [TDLTodoListModel] {
+//            itemArray = tempArray
+//        }
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
@@ -32,9 +34,30 @@ class TDLHomeController: TDLBaseTVController {
     }
     
     //MARK: - Save Data
-    func saveData() {
-        defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
-        defaults.synchronize()
+    func saveTodoListData() {
+        
+        let encoder = PropertyListEncoder()
+        do {
+            let data = try encoder.encode(itemArray)
+            guard let url = dataFilePath else {return}
+            try data.write(to: url)
+        } catch {
+            TDLLog("encoder fail \(error)")
+        }
+        
+        //defaults.set(self.itemArray, forKey: TDLConst.kTodoListArray)
+        //defaults.synchronize()
+    }
+    
+    func loadTodoList() {
+        guard let url = dataFilePath else {return}
+        guard let data = try? Data(contentsOf: url) else {return}
+        let decoder = PropertyListDecoder()
+        do {
+            itemArray = try decoder.decode([TDLTodoListModel].self, from: data)
+        } catch {
+            TDLLog("decoder fail \(error)")
+        }
     }
     
     //MARK: - Add New Items
@@ -48,7 +71,7 @@ class TDLHomeController: TDLBaseTVController {
             guard let text = alert.textFields?.first?.text else {return}
             let model = TDLTodoListModel(text, false)
             self.itemArray.append(model)
-//            self.saveData()
+            self.saveTodoListData()
             self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -81,11 +104,11 @@ extension TDLHomeController {
         
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
         
-        let isSelect = cell.accessoryType == .checkmark ? true : false
+        let isSelect = itemArray[indexPath.row].isSelect
         
         cell.accessoryType = isSelect ? .none : .checkmark
         itemArray[indexPath.row].isSelect = !isSelect
-//        saveData()
+        saveTodoListData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }

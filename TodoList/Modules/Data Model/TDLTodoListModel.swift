@@ -7,7 +7,7 @@
 
 import Foundation
 
-class TDLTodoListModel {
+class TDLTodoListModel : Codable {
     var text : String = ""
     var isSelect : Bool = false
     

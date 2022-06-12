@@ -11,7 +11,9 @@ import CoreData
 class TDLHomeController: TDLBaseTVController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    var isSearchNow : Bool = false
     var itemArray : [TodoList] = []
+    var searchArray : [TodoList] = []
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()
         bar.delegate = self
@@ -63,14 +65,14 @@ class TDLHomeController: TDLBaseTVController {
         }
         
         /*
-        guard let url = dataFilePath else {return}
-        guard let data = try? Data(contentsOf: url) else {return}
-        let decoder = PropertyListDecoder()
-        do {
-            itemArray = try decoder.decode([TodoList].self, from: data)
-        } catch {
-            TDLLog("decoder fail \(error)")
-        }
+         guard let url = dataFilePath else {return}
+         guard let data = try? Data(contentsOf: url) else {return}
+         let decoder = PropertyListDecoder()
+         do {
+         itemArray = try decoder.decode([TodoList].self, from: data)
+         } catch {
+         TDLLog("decoder fail \(error)")
+         }
          */
     }
     
@@ -105,13 +107,13 @@ extension TDLHomeController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return isSearchNow ? searchArray.count : itemArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-        let model = itemArray[indexPath.row]
+        let model = isSearchNow ? searchArray[indexPath.row] : itemArray[indexPath.row]
         cell.textLabel?.text = model.text
         cell.accessoryType = model.isSelect ? .checkmark : .none
         return cell
@@ -124,7 +126,8 @@ extension TDLHomeController {
         
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
         
-        let isSelect = itemArray[indexPath.row].isSelect
+        let model = isSearchNow ? searchArray[indexPath.row] : itemArray[indexPath.row]
+        let isSelect = model.isSelect
         
         cell.accessoryType = isSelect ? .none : .checkmark
         itemArray[indexPath.row].isSelect = !isSelect
@@ -138,9 +141,37 @@ extension TDLHomeController {
     }
 }
 
+//MARK: - UISearchBarDelegate
 extension TDLHomeController : UISearchBarDelegate {
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    // 按字符串查询
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
         guard let text = searchBar.text else {return}
-        TDLLog(text)
+        
+        searchArray = []
+        if text.isEmpty {
+            isSearchNow = false
+        } else {
+            isSearchNow = true
+            for model in itemArray {
+                guard let modelText = model.text else {return}
+                if modelText.contains(text) {
+                    searchArray.append(model)
+                }
+            }
+        }
+        tableView.reloadData()
     }
+    
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        guard let text = searchBar.text else {return}
+//
+//        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
+//        let predicate = NSPredicate(format: "text CONTAINS %@", text)
+//        //        do {
+//        //            itemArray = try context.fetch(request)
+//        //        } catch {
+//        //            TDLLog("Error fetching data from context \(error)")
+//        //        }
+//    }
 }

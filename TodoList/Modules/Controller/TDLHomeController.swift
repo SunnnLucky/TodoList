@@ -12,6 +12,11 @@ class TDLHomeController: TDLBaseTVController {
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     var itemArray : [TodoList] = []
+    lazy var searchBar : UISearchBar = {
+        let bar = UISearchBar()
+        bar.delegate = self
+        return bar
+    }()
     
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     let cellID = "HomeCellID"
@@ -22,12 +27,18 @@ class TDLHomeController: TDLBaseTVController {
         title = "Todoey"
         loadTodoList()
         
+        configureSubView()
+    }
+    
+    func configureSubView() {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.sectionHeaderTopPadding = 0.0
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
         rightBtn.tintColor = .white
         navigationItem.rightBarButtonItem = rightBtn
+        
     }
     
     //MARK: - Save Data
@@ -108,6 +119,9 @@ extension TDLHomeController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        //context.delete(itemArray[indexPath.row])
+        //itemArray.remove(at: indexPath.row)
+        
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
         
         let isSelect = itemArray[indexPath.row].isSelect
@@ -117,5 +131,16 @@ extension TDLHomeController {
         saveTodoListData()
         
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        searchBar
+    }
+}
+
+extension TDLHomeController : UISearchBarDelegate {
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let text = searchBar.text else {return}
+        TDLLog(text)
     }
 }

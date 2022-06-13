@@ -10,26 +10,27 @@ import CoreData
 
 class TDLHomeController: TDLBaseTVController {
     
+    //MARK: - Property
+    let cellID = "HomeCellID"
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
     var isSearchNow : Bool = false
     var itemArray : [TodoList] = []
     var searchArray : [TodoList] = []
+    
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()
         bar.delegate = self
         return bar
     }()
     
-    //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
-    let cellID = "HomeCellID"
-    
+    //MARK: - Function
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Todoey"
-        
-        loadTodoList(request: TodoList.fetchRequest())
-        
+        loadTodoList()
         configureSubView()
     }
     
@@ -57,7 +58,7 @@ class TDLHomeController: TDLBaseTVController {
         }
     }
     
-    func loadTodoList(request : NSFetchRequest<TodoList>) {
+    func loadTodoList(with request : NSFetchRequest<TodoList> = TodoList.fetchRequest()) {
         do {
             if isSearchNow {
                 searchArray = try context.fetch(request)
@@ -80,12 +81,12 @@ class TDLHomeController: TDLBaseTVController {
          */
     }
     
-    func searchTodoList(text : String) {
+    func searchTodoList(with text : String) {
         let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
         request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
         request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
         
-        loadTodoList(request: request)
+        loadTodoList(with: request)
     }
     
     //MARK: - Add New Items
@@ -164,22 +165,22 @@ extension TDLHomeController : UISearchBarDelegate {
             isSearchNow = false
         } else {
             isSearchNow = true
-            searchTodoList(text: text)
-//            for model in itemArray {
-//                guard let modelText = model.text else {return}
-//                if modelText.contains(text) {
-//                    searchArray.append(model)
-//                }
-//            }
+            searchTodoList(with: text)
+            //            for model in itemArray {
+            //                guard let modelText = model.text else {return}
+            //                if modelText.contains(text) {
+            //                    searchArray.append(model)
+            //                }
+            //            }
         }
         tableView.reloadData()
     }
     
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let text = searchBar.text else {return}
-//
-//        searchTodoList(text: text)
-//
-//        tableView.reloadData()
-//    }
+    //    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    //        guard let text = searchBar.text else {return}
+    //
+    //        searchTodoList(text: text)
+    //
+    //        tableView.reloadData()
+    //    }
 }

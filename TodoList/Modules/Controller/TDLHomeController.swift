@@ -157,6 +157,12 @@ extension TDLHomeController : UISearchBarDelegate {
         
         text.isEmpty ? loadTodoList() : searchTodoList(with: text)
         tableView.reloadData()
+        
+        if text.isEmpty {
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
+        }
     }
     
     //    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

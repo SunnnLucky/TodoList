@@ -159,6 +159,8 @@ extension TDLHomeController : UISearchBarDelegate {
         tableView.reloadData()
         
         if text.isEmpty {
+            // 这里跟调用顺序有关，点击叉号按钮会再次调用searchBarShouldBeginEditing导致键盘无法正常回退
+            // 加上DispatchQueue.main.async方法会改用调用顺序，使键盘正常退出
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }

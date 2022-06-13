@@ -27,7 +27,8 @@ class TDLHomeController: TDLBaseTVController {
         super.viewDidLoad()
         
         title = "Todoey"
-        loadTodoList()
+        
+        loadTodoList(request: TodoList.fetchRequest())
         
         configureSubView()
     }
@@ -43,7 +44,7 @@ class TDLHomeController: TDLBaseTVController {
         
     }
     
-    //MARK: - Save Data
+    //MARK: - Data Base
     func saveTodoListData() {
         // let encoder = PropertyListEncoder()
         do {
@@ -56,10 +57,13 @@ class TDLHomeController: TDLBaseTVController {
         }
     }
     
-    func loadTodoList() {
-        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
+    func loadTodoList(request : NSFetchRequest<TodoList>) {
         do {
-            itemArray = try context.fetch(request)
+            if isSearchNow {
+                searchArray = try context.fetch(request)
+            } else {
+                itemArray = try context.fetch(request)
+            }
         } catch {
             TDLLog("Error fetching data from context \(error)")
         }
@@ -74,6 +78,14 @@ class TDLHomeController: TDLBaseTVController {
          TDLLog("decoder fail \(error)")
          }
          */
+    }
+    
+    func searchTodoList(text : String) {
+        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
+        request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
+        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
+        
+        loadTodoList(request: request)
     }
     
     //MARK: - Add New Items
@@ -130,7 +142,7 @@ extension TDLHomeController {
         let isSelect = model.isSelect
         
         cell.accessoryType = isSelect ? .none : .checkmark
-        itemArray[indexPath.row].isSelect = !isSelect
+        model.isSelect = !isSelect
         saveTodoListData()
         
         tableView.deselectRow(at: indexPath, animated: true)
@@ -148,17 +160,17 @@ extension TDLHomeController : UISearchBarDelegate {
         
         guard let text = searchBar.text else {return}
         
-        searchArray = []
         if text.isEmpty {
             isSearchNow = false
         } else {
             isSearchNow = true
-            for model in itemArray {
-                guard let modelText = model.text else {return}
-                if modelText.contains(text) {
-                    searchArray.append(model)
-                }
-            }
+            searchTodoList(text: text)
+//            for model in itemArray {
+//                guard let modelText = model.text else {return}
+//                if modelText.contains(text) {
+//                    searchArray.append(model)
+//                }
+//            }
         }
         tableView.reloadData()
     }
@@ -166,12 +178,8 @@ extension TDLHomeController : UISearchBarDelegate {
 //    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 //        guard let text = searchBar.text else {return}
 //
-//        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
-//        let predicate = NSPredicate(format: "text CONTAINS %@", text)
-//        //        do {
-//        //            itemArray = try context.fetch(request)
-//        //        } catch {
-//        //            TDLLog("Error fetching data from context \(error)")
-//        //        }
+//        searchTodoList(text: text)
+//
+//        tableView.reloadData()
 //    }
 }

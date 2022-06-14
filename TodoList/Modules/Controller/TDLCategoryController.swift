@@ -20,7 +20,7 @@ class TDLCategoryController: TDLBaseTVController {
         super.viewDidLoad()
         
         title = "Todoey"
-        loadTodoList()
+        loadCategoryList()
         configureSubView()
     }
     
@@ -35,18 +35,18 @@ class TDLCategoryController: TDLBaseTVController {
     
     //MARK: - Add New Items
     @objc func addButtonPressed() {
-        let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Add New Category", message: "", preferredStyle: .alert)
         alert.addTextField { textField in
-            textField.placeholder = "Creat new item"
+            textField.placeholder = "Creat new Category"
         }
         
-        let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
+        let addAction = UIAlertAction(title: "Add Category", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
             let model = Category(context: self.context)
             model.name = text
 
             self.itemArray.append(model)
-            self.saveTodoListData()
+            self.saveCategoryData()
             self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -56,7 +56,7 @@ class TDLCategoryController: TDLBaseTVController {
     }
     
     //MARK: - Data Base
-    func saveTodoListData() {
+    func saveCategoryData() {
         do {
             try context.save()
         } catch {
@@ -64,7 +64,7 @@ class TDLCategoryController: TDLBaseTVController {
         }
     }
     
-    func loadTodoList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
+    func loadCategoryList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
             itemArray = try context.fetch(request)
         } catch {

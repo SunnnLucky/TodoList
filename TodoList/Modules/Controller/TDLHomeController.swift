@@ -27,7 +27,7 @@ class TDLHomeController: TDLBaseTVController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Todoey"
+        title = "Items"
         loadTodoList()
         configureSubView()
     }
@@ -40,7 +40,6 @@ class TDLHomeController: TDLBaseTVController {
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
         rightBtn.tintColor = .white
         navigationItem.rightBarButtonItem = rightBtn
-        
     }
     
     //MARK: - Data Base

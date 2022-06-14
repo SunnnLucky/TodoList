@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         window?.frame = windowScene.coordinateSpace.bounds
         
-        let homeController = TDLBaseNavController(rootViewController: TDLHomeController())
+        let homeController = TDLBaseNavController(rootViewController: TDLCategoryController())
         
         window?.rootViewController = homeController
         window?.makeKeyAndVisible()

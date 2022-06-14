@@ -19,6 +19,7 @@ class TDLBaseNavController: UINavigationController {
         appearance.backgroundColor = .systemBlue
         appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         
+        navigationBar.tintColor = .white
         navigationBar.standardAppearance = appearance;
         navigationBar.scrollEdgeAppearance = appearance
         navigationBar.isTranslucent = false

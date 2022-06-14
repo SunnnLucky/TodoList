@@ -15,7 +15,7 @@ class TDLHomeController: TDLBaseTVController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
-    var itemArray : [TodoList] = []
+    var itemArray : [Item] = []
     
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()
@@ -38,7 +38,6 @@ class TDLHomeController: TDLBaseTVController {
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
-        rightBtn.tintColor = .white
         navigationItem.rightBarButtonItem = rightBtn
     }
     
@@ -55,7 +54,7 @@ class TDLHomeController: TDLBaseTVController {
         }
     }
     
-    func loadTodoList(with request : NSFetchRequest<TodoList> = TodoList.fetchRequest()) {
+    func loadTodoList(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
         do {
             itemArray = try context.fetch(request)
         } catch {
@@ -75,7 +74,7 @@ class TDLHomeController: TDLBaseTVController {
     }
     
     func searchTodoList(with text : String) {
-        let request : NSFetchRequest<TodoList> = TodoList.fetchRequest()
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
         request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
         request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
         
@@ -91,7 +90,7 @@ class TDLHomeController: TDLBaseTVController {
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
-            let model = TodoList(context: self.context)
+            let model = Item(context: self.context)
             model.text = text
             model.isSelect = false
             

@@ -12,21 +12,24 @@ class TDLCategoryController: TDLBaseTVController {
 
     //MARK: - Property
     let cellID = "CategoryCellID"
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    
+    var itemArray : [Category] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Todoey"
+        loadTodoList()
         configureSubView()
     }
     
     func configureSubView() {
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
-        //tableView.sectionHeaderTopPadding = 0.0
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
-        rightBtn.tintColor = .white
         navigationItem.rightBarButtonItem = rightBtn
     }
     
@@ -39,18 +42,34 @@ class TDLCategoryController: TDLBaseTVController {
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
-//            let model = TodoList(context: self.context)
-//            model.text = text
-//            model.isSelect = false
-//
-//            self.itemArray.append(model)
-//            self.saveTodoListData()
-//            self.tableView.reloadData()
+            let model = Category(context: self.context)
+            model.name = text
+
+            self.itemArray.append(model)
+            self.saveTodoListData()
+            self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
         alert.addAction(addAction)
         present(alert, animated: true, completion: nil)
+    }
+    
+    //MARK: - Data Base
+    func saveTodoListData() {
+        do {
+            try context.save()
+        } catch {
+            TDLLog("Error saving context \(error)")
+        }
+    }
+    
+    func loadTodoList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
+        do {
+            itemArray = try context.fetch(request)
+        } catch {
+            TDLLog("Error fetching data from context \(error)")
+        }
     }
 }
 
@@ -61,20 +80,20 @@ extension TDLCategoryController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return itemArray.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-//        let model = itemArray[indexPath.row]
-//        cell.textLabel?.text = model.text
-//        cell.accessoryType = model.isSelect ? .checkmark : .none
+        let model = itemArray[indexPath.row]
+        cell.textLabel?.text = model.name
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        navigationController?.pushViewController(TDLHomeController(), animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

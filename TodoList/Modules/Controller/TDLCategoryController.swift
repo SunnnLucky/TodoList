@@ -93,7 +93,9 @@ extension TDLCategoryController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        navigationController?.pushViewController(TDLHomeController(), animated: true)
+        let destinationVC = TDLTodoListController()
+        destinationVC.selectedCategory = categories[indexPath.row]
+        navigationController?.pushViewController(destinationVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }

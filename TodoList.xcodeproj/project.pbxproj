@@ -14,7 +14,7 @@
 		715DC7D42852056000A5DAAF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7D32852056000A5DAAF /* SceneDelegate.swift */; };
 		715DC7DB2852056100A5DAAF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 715DC7DA2852056100A5DAAF /* Assets.xcassets */; };
 		715DC7DE2852056100A5DAAF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 715DC7DC2852056100A5DAAF /* LaunchScreen.storyboard */; };
-		715DC7E62852084E00A5DAAF /* TDLHomeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7E52852084E00A5DAAF /* TDLHomeController.swift */; };
+		715DC7E62852084E00A5DAAF /* TDLTodoListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7E52852084E00A5DAAF /* TDLTodoListController.swift */; };
 		715DC7EA28520AF900A5DAAF /* TDLBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7E928520AF900A5DAAF /* TDLBaseViewController.swift */; };
 		715DC7EC28520B1700A5DAAF /* TDLBaseTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7EB28520B1700A5DAAF /* TDLBaseTVController.swift */; };
 		715DC7F32852F11100A5DAAF /* TDLBaseNavController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 715DC7F22852F11100A5DAAF /* TDLBaseNavController.swift */; };
@@ -30,7 +30,7 @@
 		715DC7DA2852056100A5DAAF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		715DC7DD2852056100A5DAAF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		715DC7DF2852056100A5DAAF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		715DC7E52852084E00A5DAAF /* TDLHomeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLHomeController.swift; sourceTree = "<group>"; };
+		715DC7E52852084E00A5DAAF /* TDLTodoListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLTodoListController.swift; sourceTree = "<group>"; };
 		715DC7E928520AF900A5DAAF /* TDLBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLBaseViewController.swift; sourceTree = "<group>"; };
 		715DC7EB28520B1700A5DAAF /* TDLBaseTVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLBaseTVController.swift; sourceTree = "<group>"; };
 		715DC7F22852F11100A5DAAF /* TDLBaseNavController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLBaseNavController.swift; sourceTree = "<group>"; };
@@ -66,7 +66,7 @@
 			isa = PBXGroup;
 			children = (
 				7140ED8E2858B75C0085B46E /* TDLCategoryController.swift */,
-				715DC7E52852084E00A5DAAF /* TDLHomeController.swift */,
+				715DC7E52852084E00A5DAAF /* TDLTodoListController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -233,7 +233,7 @@
 				7140ED8F2858B75C0085B46E /* TDLCategoryController.swift in Sources */,
 				7140ED6A285481DA0085B46E /* DataModel.xcdatamodeld in Sources */,
 				715DC7D42852056000A5DAAF /* SceneDelegate.swift in Sources */,
-				715DC7E62852084E00A5DAAF /* TDLHomeController.swift in Sources */,
+				715DC7E62852084E00A5DAAF /* TDLTodoListController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,7 @@
 import UIKit
 import CoreData
 
-class TDLHomeController: TDLBaseTVController {
+class TDLTodoListController: TDLBaseTVController {
     
     //MARK: - Property
     let cellID = "HomeCellID"
@@ -16,6 +16,11 @@ class TDLHomeController: TDLBaseTVController {
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     var itemArray = [Item]()
+    var selectedCategory : Category? {
+        didSet {
+            loadTodoList()
+        }
+    }
     
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()
@@ -28,7 +33,6 @@ class TDLHomeController: TDLBaseTVController {
         super.viewDidLoad()
         
         title = "Items"
-        loadTodoList()
         configureSubView()
     }
     
@@ -54,7 +58,14 @@ class TDLHomeController: TDLBaseTVController {
         }
     }
     
-    func loadTodoList(with request : NSFetchRequest<Item> = Item.fetchRequest()) {
+    func loadTodoList(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        let matchesPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+        if let addtionalPredicate = predicate {
+            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [addtionalPredicate,matchesPredicate])
+        } else {
+            request.predicate = matchesPredicate
+        }
+
         do {
             itemArray = try context.fetch(request)
         } catch {
@@ -75,10 +86,10 @@ class TDLHomeController: TDLBaseTVController {
     
     func searchTodoList(with text : String) {
         let request : NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
+        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
         request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
         
-        loadTodoList(with: request)
+        loadTodoList(with: request, predicate: predicate)
     }
     
     //MARK: - Add New Items
@@ -93,6 +104,7 @@ class TDLHomeController: TDLBaseTVController {
             let model = Item(context: self.context)
             model.text = text
             model.isSelect = false
+            model.parentCategory = self.selectedCategory
             
             self.itemArray.append(model)
             self.saveTodoListData()
@@ -106,7 +118,7 @@ class TDLHomeController: TDLBaseTVController {
 }
 
 // MARK: - Table view data source & delegate
-extension TDLHomeController {
+extension TDLTodoListController {
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -147,7 +159,7 @@ extension TDLHomeController {
 }
 
 //MARK: - UISearchBarDelegate
-extension TDLHomeController : UISearchBarDelegate {
+extension TDLTodoListController : UISearchBarDelegate {
     // 按字符串查询
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         

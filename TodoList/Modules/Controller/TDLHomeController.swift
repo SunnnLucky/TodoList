@@ -15,7 +15,7 @@ class TDLHomeController: TDLBaseTVController {
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
-    var itemArray : [Item] = []
+    var itemArray = [Item]()
     
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()

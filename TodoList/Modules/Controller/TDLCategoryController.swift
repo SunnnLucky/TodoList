@@ -14,7 +14,7 @@ class TDLCategoryController: TDLBaseTVController {
     let cellID = "CategoryCellID"
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    var itemArray : [Category] = []
+    var categories = [Category]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,7 +45,7 @@ class TDLCategoryController: TDLBaseTVController {
             let model = Category(context: self.context)
             model.name = text
 
-            self.itemArray.append(model)
+            self.categories.append(model)
             self.saveCategoryData()
             self.tableView.reloadData()
         }
@@ -66,7 +66,7 @@ class TDLCategoryController: TDLBaseTVController {
     
     func loadCategoryList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
         do {
-            itemArray = try context.fetch(request)
+            categories = try context.fetch(request)
         } catch {
             TDLLog("Error fetching data from context \(error)")
         }
@@ -80,14 +80,14 @@ extension TDLCategoryController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return categories.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-        let model = itemArray[indexPath.row]
+        let model = categories[indexPath.row]
         cell.textLabel?.text = model.name
         return cell
     }

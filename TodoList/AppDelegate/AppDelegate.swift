@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import RealmSwift
 
 func TDLLog<T>(_ messsage : T, file : String = #file, funcName : String = #function, lineNum : Int = #line)
 {
@@ -24,6 +25,12 @@ func TDLLog<T>(_ messsage : T, file : String = #file, funcName : String = #funct
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        do {
+            let realm = try Realm()
+        } catch {
+            TDLLog("Realm Error \(error)")
+        }
+        
         return true
     }
     

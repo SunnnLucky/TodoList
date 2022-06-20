@@ -12,13 +12,13 @@ class TDLTodoListController: TDLBaseTVController {
     
     //MARK: - Property
     let cellID = "HomeCellID"
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     var itemArray = [Item]()
     var selectedCategory : Category? {
         didSet {
-            loadTodoList()
+//            loadTodoList()
         }
     }
     
@@ -46,6 +46,7 @@ class TDLTodoListController: TDLBaseTVController {
     }
     
     //MARK: - Data Base
+    /*
     func saveTodoListData() {
         // let encoder = PropertyListEncoder()
         do {
@@ -91,6 +92,7 @@ class TDLTodoListController: TDLBaseTVController {
         
         loadTodoList(with: request, predicate: predicate)
     }
+     */
     
     //MARK: - Add New Items
     @objc func addButtonPressed() {
@@ -100,15 +102,15 @@ class TDLTodoListController: TDLBaseTVController {
         }
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
-            guard let text = alert.textFields?.first?.text else {return}
-            let model = Item(context: self.context)
-            model.text = text
-            model.isSelect = false
-            model.parentCategory = self.selectedCategory
-            
-            self.itemArray.append(model)
-            self.saveTodoListData()
-            self.tableView.reloadData()
+//            guard let text = alert.textFields?.first?.text else {return}
+//            let model = Item(context: self.context)
+//            model.text = text
+//            model.isSelect = false
+//            model.parentCategory = self.selectedCategory
+//
+//            self.itemArray.append(model)
+//            self.saveTodoListData()
+//            self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
@@ -131,8 +133,8 @@ extension TDLTodoListController {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
         let model = itemArray[indexPath.row]
-        cell.textLabel?.text = model.text
-        cell.accessoryType = model.isSelect ? .checkmark : .none
+//        cell.textLabel?.text = model.text
+//        cell.accessoryType = model.isSelect ? .checkmark : .none
         return cell
     }
     
@@ -144,11 +146,11 @@ extension TDLTodoListController {
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
         
         let model = itemArray[indexPath.row]
-        let isSelect = model.isSelect
+//        let isSelect = model.isSelect
         
-        cell.accessoryType = isSelect ? .none : .checkmark
-        model.isSelect = !isSelect
-        saveTodoListData()
+//        cell.accessoryType = isSelect ? .none : .checkmark
+//        model.isSelect = !isSelect
+//        saveTodoListData()
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -165,7 +167,7 @@ extension TDLTodoListController : UISearchBarDelegate {
         
         guard let text = searchBar.text else {return}
         
-        text.isEmpty ? loadTodoList() : searchTodoList(with: text)
+//        text.isEmpty ? loadTodoList() : searchTodoList(with: text)
         tableView.reloadData()
         
         if text.isEmpty {

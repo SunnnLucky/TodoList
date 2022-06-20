@@ -6,13 +6,15 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
+import RealmSwift
 
 class TDLCategoryController: TDLBaseTVController {
 
     //MARK: - Property
     let cellID = "CategoryCellID"
-    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
+//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var categories = [Category]()
     
@@ -20,7 +22,7 @@ class TDLCategoryController: TDLBaseTVController {
         super.viewDidLoad()
         
         title = "Todoey"
-        loadCategoryList()
+//        loadCategoryList()
         configureSubView()
     }
     
@@ -42,12 +44,14 @@ class TDLCategoryController: TDLBaseTVController {
         
         let addAction = UIAlertAction(title: "Add Category", style: .default) { action in
             guard let text = alert.textFields?.first?.text else {return}
-            let model = Category(context: self.context)
-            model.name = text
-
-            self.categories.append(model)
-            self.saveCategoryData()
+            let newCategory = Category()
+            newCategory.name = text
+            self.categories.append(newCategory)
             self.tableView.reloadData()
+            self.saveCategoryData(newCategory)
+            /* core data
+            let model = Category(context: self.context)
+             */
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
@@ -55,7 +59,19 @@ class TDLCategoryController: TDLBaseTVController {
         present(alert, animated: true, completion: nil)
     }
     
+    //MARK: - Realm
+    func saveCategoryData(_ category: Category) {
+        do {
+            try realm.write {
+                realm.add(category)
+            }
+        } catch {
+            TDLLog("Error saving context \(error)")
+        }
+    }
+    
     //MARK: - Data Base
+    /*
     func saveCategoryData() {
         do {
             try context.save()
@@ -71,6 +87,7 @@ class TDLCategoryController: TDLBaseTVController {
             TDLLog("Error fetching data from context \(error)")
         }
     }
+     */
 }
 
 // MARK: - Table view data source & delegate

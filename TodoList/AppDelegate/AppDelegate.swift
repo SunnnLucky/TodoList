@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
 import RealmSwift
 
 func TDLLog<T>(_ messsage : T, file : String = #file, funcName : String = #function, lineNum : Int = #line)
@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         do {
-            let realm = try Realm()
+            _ = try Realm()
         } catch {
             TDLLog("Realm Error \(error)")
         }
@@ -42,6 +42,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didDiscardSceneSessions sceneSessions: Set<UISceneSession>) {
     }
     
+    /*
     // MARK: - Core Data stack
     lazy var persistentContainer: NSPersistentContainer = {
         let container = NSPersistentContainer(name: "DataModel")
@@ -65,4 +66,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+     */
 }

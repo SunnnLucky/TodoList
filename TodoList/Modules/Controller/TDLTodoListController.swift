@@ -6,19 +6,21 @@
 //
 
 import UIKit
-import CoreData
+//import CoreData
+import RealmSwift
 
 class TDLTodoListController: TDLBaseTVController {
     
     //MARK: - Property
     let cellID = "HomeCellID"
+    let realm = try! Realm()
 //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
-    var itemArray = [Item]()
+    var todoItems: Results<Item>?
     var selectedCategory : Category? {
         didSet {
-//            loadTodoList()
+            loadItemList()
         }
     }
     
@@ -43,6 +45,21 @@ class TDLTodoListController: TDLBaseTVController {
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
         navigationItem.rightBarButtonItem = rightBtn
+    }
+    
+    //MARK: - Realm
+//    func saveItemData(_ item: Item) {
+//        do {
+//            try realm.write {
+//                realm.add(item)
+//            }
+//        } catch {
+//            TDLLog("Error saving context \(error)")
+//        }
+//    }
+    
+    func loadItemList() {
+        todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
     }
     
     //MARK: - Data Base
@@ -102,15 +119,18 @@ class TDLTodoListController: TDLBaseTVController {
         }
         
         let addAction = UIAlertAction(title: "Add Item", style: .default) { action in
-//            guard let text = alert.textFields?.first?.text else {return}
-//            let model = Item(context: self.context)
-//            model.text = text
-//            model.isSelect = false
-//            model.parentCategory = self.selectedCategory
-//
-//            self.itemArray.append(model)
-//            self.saveTodoListData()
-//            self.tableView.reloadData()
+            guard let text = alert.textFields?.first?.text else {return}
+            guard let currentCategory = self.selectedCategory else {return}
+            do {
+                try self.realm.write({
+                    let item = Item()
+                    item.title = text
+                    currentCategory.items.append(item)
+                })
+            } catch {
+                TDLLog("Error saving context \(error)")
+            }
+            self.tableView.reloadData()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         alert.addAction(cancelAction)
@@ -126,15 +146,15 @@ extension TDLTodoListController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return itemArray.count
+        return todoItems?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-        let model = itemArray[indexPath.row]
-//        cell.textLabel?.text = model.text
-//        cell.accessoryType = model.isSelect ? .checkmark : .none
+        guard let model = todoItems?[indexPath.row] else {return cell}
+        cell.textLabel?.text = model.title
+        cell.accessoryType = model.done ? .checkmark : .none
         return cell
     }
     
@@ -144,14 +164,17 @@ extension TDLTodoListController {
         //itemArray.remove(at: indexPath.row)
         
         guard let cell = tableView.cellForRow(at: indexPath) else {return}
-        
-        let model = itemArray[indexPath.row]
-//        let isSelect = model.isSelect
-        
-//        cell.accessoryType = isSelect ? .none : .checkmark
-//        model.isSelect = !isSelect
-//        saveTodoListData()
-        
+        guard let model = todoItems?[indexPath.row] else {return}
+        let isSelect = model.done
+        cell.accessoryType = isSelect ? .none : .checkmark
+        do {
+            try realm.write{
+                model.done = !isSelect
+            }
+        } catch {
+            TDLLog("Error saving context \(error)")
+        }
+
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

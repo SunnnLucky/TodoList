@@ -16,13 +16,13 @@ class TDLCategoryController: TDLBaseTVController {
     let realm = try! Realm()
 //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
-    var categories = [Category]()
+    var categories: Results<Category>?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         title = "Todoey"
-//        loadCategoryList()
+        loadCategoryList()
         configureSubView()
     }
     
@@ -46,9 +46,8 @@ class TDLCategoryController: TDLBaseTVController {
             guard let text = alert.textFields?.first?.text else {return}
             let newCategory = Category()
             newCategory.name = text
-            self.categories.append(newCategory)
-            self.tableView.reloadData()
             self.saveCategoryData(newCategory)
+            self.tableView.reloadData()
             /* core data
             let model = Category(context: self.context)
              */
@@ -68,6 +67,10 @@ class TDLCategoryController: TDLBaseTVController {
         } catch {
             TDLLog("Error saving context \(error)")
         }
+    }
+    
+    func loadCategoryList() {
+        categories = realm.objects(Category.self)
     }
     
     //MARK: - Data Base
@@ -97,21 +100,20 @@ extension TDLCategoryController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 1
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
-        let model = categories[indexPath.row]
-        cell.textLabel?.text = model.name
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
         return cell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destinationVC = TDLTodoListController()
-        destinationVC.selectedCategory = categories[indexPath.row]
+        destinationVC.selectedCategory = categories?[indexPath.row]
         navigationController?.pushViewController(destinationVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
     }

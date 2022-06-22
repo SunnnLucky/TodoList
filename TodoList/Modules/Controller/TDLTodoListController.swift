@@ -63,7 +63,7 @@ class TDLTodoListController: TDLBaseTVController {
     }
     
     func searchTodoList(with text : String) {
-        todoItems = todoItems?.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "title", ascending: true)
+        todoItems = todoItems?.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "dateCreated", ascending: true)
 //        let request : NSFetchRequest<Item> = Item.fetchRequest()
 //        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
 //        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
@@ -134,6 +134,7 @@ class TDLTodoListController: TDLBaseTVController {
                 try self.realm.write({
                     let item = Item()
                     item.title = text
+                    item.dateCreated = Date()
                     currentCategory.items.append(item)
                 })
             } catch {

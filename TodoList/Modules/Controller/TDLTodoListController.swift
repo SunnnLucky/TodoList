@@ -62,6 +62,15 @@ class TDLTodoListController: TDLBaseTVController {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
     }
     
+    func searchTodoList(with text : String) {
+        todoItems = todoItems?.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "title", ascending: true)
+//        let request : NSFetchRequest<Item> = Item.fetchRequest()
+//        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
+//        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
+//
+//        loadTodoList(with: request, predicate: predicate)
+    }
+    
     //MARK: - Data Base
     /*
     func saveTodoListData() {
@@ -190,7 +199,7 @@ extension TDLTodoListController : UISearchBarDelegate {
         
         guard let text = searchBar.text else {return}
         
-//        text.isEmpty ? loadTodoList() : searchTodoList(with: text)
+        text.isEmpty ? loadItemList() : searchTodoList(with: text)
         tableView.reloadData()
         
         if text.isEmpty {

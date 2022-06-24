@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		712684772865E85000C0B923 /* TDLSwipeTVController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 712684762865E85000C0B923 /* TDLSwipeTVController.swift */; };
 		7140ED62285342680085B46E /* TDLConst.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7140ED61285342680085B46E /* TDLConst.swift */; };
 		7140ED8F2858B75C0085B46E /* TDLCategoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7140ED8E2858B75C0085B46E /* TDLCategoryController.swift */; };
 		714FD95D28603FE80047E790 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 714FD95C28603FE80047E790 /* Item.swift */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		4FBA57C5EA8BD8950EA4193A /* Pods_TodoList.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TodoList.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		712684762865E85000C0B923 /* TDLSwipeTVController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLSwipeTVController.swift; sourceTree = "<group>"; };
 		7140ED61285342680085B46E /* TDLConst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLConst.swift; sourceTree = "<group>"; };
 		7140ED8E2858B75C0085B46E /* TDLCategoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TDLCategoryController.swift; sourceTree = "<group>"; };
 		714FD95C28603FE80047E790 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 		7140ED6528536E700085B46E /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				712684762865E85000C0B923 /* TDLSwipeTVController.swift */,
 				7140ED8E2858B75C0085B46E /* TDLCategoryController.swift */,
 				715DC7E52852084E00A5DAAF /* TDLTodoListController.swift */,
 			);
@@ -302,6 +305,7 @@
 				715DC7EC28520B1700A5DAAF /* TDLBaseTVController.swift in Sources */,
 				715DC7D22852056000A5DAAF /* AppDelegate.swift in Sources */,
 				715DC7F32852F11100A5DAAF /* TDLBaseNavController.swift in Sources */,
+				712684772865E85000C0B923 /* TDLSwipeTVController.swift in Sources */,
 				7140ED8F2858B75C0085B46E /* TDLCategoryController.swift in Sources */,
 				715DC7D42852056000A5DAAF /* SceneDelegate.swift in Sources */,
 				715DC7E62852084E00A5DAAF /* TDLTodoListController.swift in Sources */,

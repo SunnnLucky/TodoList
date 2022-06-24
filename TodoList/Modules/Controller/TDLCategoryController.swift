@@ -8,14 +8,12 @@
 import UIKit
 //import CoreData
 import RealmSwift
-import SwipeCellKit
 
-class TDLCategoryController: TDLBaseTVController {
-
+class TDLCategoryController: TDLSwipeTVController {
+    
     //MARK: - Property
-    let cellID = "CategoryCellID"
     let realm = try! Realm()
-//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     var categories: Results<Category>?
     
@@ -28,10 +26,6 @@ class TDLCategoryController: TDLBaseTVController {
     }
     
     func configureSubView() {
-        
-        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: cellID)
-        tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
-        
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
         navigationItem.rightBarButtonItem = rightBtn
     }
@@ -50,7 +44,7 @@ class TDLCategoryController: TDLBaseTVController {
             self.saveCategoryData(newCategory)
             self.tableView.reloadData()
             /* core data
-            let model = Category(context: self.context)
+             let model = Category(context: self.context)
              */
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -74,23 +68,36 @@ class TDLCategoryController: TDLBaseTVController {
         categories = realm.objects(Category.self)
     }
     
-    //MARK: - Data Base
-    /*
-    func saveCategoryData() {
-        do {
-            try context.save()
-        } catch {
-            TDLLog("Error saving context \(error)")
+    override func deleteAction(indexPath: IndexPath) {
+        if let object = self.categories?[indexPath.row] {
+            do {
+                try self.realm.write {
+                    self.realm.delete(object)
+                }
+                //                    tableView.deleteRows(at: [indexPath], with: .fade)
+            } catch {
+                TDLLog("Error deleting context \(error)")
+            }
         }
     }
     
-    func loadCategoryList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categories = try context.fetch(request)
-        } catch {
-            TDLLog("Error fetching data from context \(error)")
-        }
-    }
+    //MARK: - Data Base
+    /*
+     func saveCategoryData() {
+     do {
+     try context.save()
+     } catch {
+     TDLLog("Error saving context \(error)")
+     }
+     }
+     
+     func loadCategoryList(with request : NSFetchRequest<Category> = Category.fetchRequest()) {
+     do {
+     categories = try context.fetch(request)
+     } catch {
+     TDLLog("Error fetching data from context \(error)")
+     }
+     }
      */
 }
 
@@ -105,13 +112,8 @@ extension TDLCategoryController {
         return categories?.count ?? 1
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80.0
-    }
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! SwipeTableViewCell
-        cell.delegate = self
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
         return cell
     }
@@ -121,33 +123,5 @@ extension TDLCategoryController {
         destinationVC.selectedCategory = categories?[indexPath.row]
         navigationController?.pushViewController(destinationVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
-
-extension TDLCategoryController : SwipeTableViewCellDelegate {
-    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
-        guard orientation == .right else { return nil }
-
-        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
-            // handle action by updating model with deletion
-            if let object = self.categories?[indexPath.row] {
-                do {
-                    try self.realm.write {
-                        self.realm.delete(object)
-                    }
-//                    tableView.deleteRows(at: [indexPath], with: .fade)
-                } catch {
-                    TDLLog("Error deleting context \(error)")
-                }
-            }
-        }
-        deleteAction.image = UIImage(named: "delete-icon")
-        return [deleteAction]
-    }
-    
-    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
-        var options = SwipeTableOptions()
-        options.expansionStyle = .destructive
-        return options
     }
 }

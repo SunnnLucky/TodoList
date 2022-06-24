@@ -9,10 +9,9 @@ import UIKit
 //import CoreData
 import RealmSwift
 
-class TDLTodoListController: TDLBaseTVController {
+class TDLTodoListController: TDLSwipeTVController {
     
     //MARK: - Property
-    let cellID = "HomeCellID"
     let realm = try! Realm()
 //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
@@ -39,12 +38,22 @@ class TDLTodoListController: TDLBaseTVController {
     }
     
     func configureSubView() {
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.sectionHeaderTopPadding = 0.0
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
         navigationItem.rightBarButtonItem = rightBtn
+    }
+    
+    override func deleteAction(indexPath: IndexPath) {
+        guard let currentCategory = self.selectedCategory else {return}
+        do {
+            try self.realm.write({
+                currentCategory.items.remove(at: indexPath.row)
+            })
+        } catch {
+            TDLLog("Error saving context \(error)")
+        }
     }
     
     //MARK: - Realm
@@ -160,7 +169,7 @@ extension TDLTodoListController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         
         guard let model = todoItems?[indexPath.row] else {return cell}
         cell.textLabel?.text = model.title

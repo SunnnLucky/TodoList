@@ -133,18 +133,21 @@ extension TDLCategoryController : SwipeTableViewCellDelegate {
             if let object = self.categories?[indexPath.row] {
                 do {
                     try self.realm.write {
-                         self.realm.delete(object)
+                        self.realm.delete(object)
                     }
-                    tableView.deleteRows(at: [indexPath], with: .fade)
+//                    tableView.deleteRows(at: [indexPath], with: .fade)
                 } catch {
                     TDLLog("Error deleting context \(error)")
                 }
             }
         }
-
-        // customize the action appearance
         deleteAction.image = UIImage(named: "delete-icon")
-
         return [deleteAction]
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsOptionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeTableOptions()
+        options.expansionStyle = .destructive
+        return options
     }
 }

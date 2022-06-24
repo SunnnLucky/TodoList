@@ -105,21 +105,16 @@ extension TDLCategoryController {
         return categories?.count ?? 1
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80.0
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! SwipeTableViewCell
         cell.delegate = self
         cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
         return cell
     }
-    
-    /*
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
-        
-        cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
-        return cell
-    }*/
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destinationVC = TDLTodoListController()
@@ -135,10 +130,20 @@ extension TDLCategoryController : SwipeTableViewCellDelegate {
 
         let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
             // handle action by updating model with deletion
+            if let object = self.categories?[indexPath.row] {
+                do {
+                    try self.realm.write {
+                         self.realm.delete(object)
+                    }
+                    tableView.deleteRows(at: [indexPath], with: .fade)
+                } catch {
+                    TDLLog("Error deleting context \(error)")
+                }
+            }
         }
 
         // customize the action appearance
-        deleteAction.image = UIImage(named: "delete")
+        deleteAction.image = UIImage(named: "delete-icon")
 
         return [deleteAction]
     }

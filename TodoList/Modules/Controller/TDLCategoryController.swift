@@ -8,6 +8,7 @@
 import UIKit
 //import CoreData
 import RealmSwift
+import SwipeCellKit
 
 class TDLCategoryController: TDLBaseTVController {
 
@@ -28,7 +29,7 @@ class TDLCategoryController: TDLBaseTVController {
     
     func configureSubView() {
         
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellID)
+        tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: cellID)
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
         let rightBtn = UIBarButtonItem(barButtonSystemItem: .add, target: self, action:#selector(addButtonPressed))
@@ -95,6 +96,7 @@ class TDLCategoryController: TDLBaseTVController {
 
 // MARK: - Table view data source & delegate
 extension TDLCategoryController {
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -104,17 +106,40 @@ extension TDLCategoryController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! SwipeTableViewCell
+        cell.delegate = self
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
+        return cell
+    }
+    
+    /*
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
         
         cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
         return cell
-    }
+    }*/
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let destinationVC = TDLTodoListController()
         destinationVC.selectedCategory = categories?[indexPath.row]
         navigationController?.pushViewController(destinationVC, animated: true)
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension TDLCategoryController : SwipeTableViewCellDelegate {
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        guard orientation == .right else { return nil }
+
+        let deleteAction = SwipeAction(style: .destructive, title: "Delete") { action, indexPath in
+            // handle action by updating model with deletion
+        }
+
+        // customize the action appearance
+        deleteAction.image = UIImage(named: "delete")
+
+        return [deleteAction]
     }
 }

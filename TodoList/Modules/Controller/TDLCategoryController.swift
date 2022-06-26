@@ -113,7 +113,7 @@ extension TDLCategoryController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let model = categories?[indexPath.row] {
             cell.textLabel?.text = model.name
-            cell.backgroundColor = .init(hexString: model.colorHex)
+            cell.backgroundColor = UIColor(hexString: model.colorHex)
         }
         return cell
     }

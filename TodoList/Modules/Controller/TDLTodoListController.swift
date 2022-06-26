@@ -173,7 +173,7 @@ extension TDLTodoListController {
         guard let model = todoItems?[indexPath.row] else {return cell}
         cell.textLabel?.text = model.title
         cell.accessoryType = model.done ? .checkmark : .none
-        cell.backgroundColor = .init(hexString: model.colorHex)
+        cell.backgroundColor = UIColor(hexString: model.colorHex)
         return cell
     }
     

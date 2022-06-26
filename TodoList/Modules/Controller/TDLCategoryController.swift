@@ -69,15 +69,11 @@ class TDLCategoryController: TDLSwipeTVController {
     }
     
     override func deleteAction(indexPath: IndexPath) {
-        if let object = self.categories?[indexPath.row] {
-            do {
-                try self.realm.write {
-                    self.realm.delete(object)
-                }
-                //                    tableView.deleteRows(at: [indexPath], with: .fade)
-            } catch {
-                TDLLog("Error deleting context \(error)")
-            }
+        guard let object = self.categories?[indexPath.row] else {return}
+        do {
+            try self.realm.write {self.realm.delete(object)}
+        } catch {
+            TDLLog("Error deleting context \(error)")
         }
     }
     

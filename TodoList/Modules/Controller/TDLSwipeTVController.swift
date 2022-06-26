@@ -7,6 +7,7 @@
 
 import UIKit
 import SwipeCellKit
+import ChameleonFramework
 
 class TDLSwipeTVController: TDLBaseTVController {
     
@@ -15,6 +16,7 @@ class TDLSwipeTVController: TDLBaseTVController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
         tableView.register(SwipeTableViewCell.self, forCellReuseIdentifier: cellID)
     }
     
@@ -36,6 +38,7 @@ class TDLSwipeTVController: TDLBaseTVController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! SwipeTableViewCell
         cell.delegate = self
+        cell.backgroundColor = .randomFlat()
         return cell
     }
 }

@@ -46,11 +46,9 @@ class TDLTodoListController: TDLSwipeTVController {
     }
     
     override func deleteAction(indexPath: IndexPath) {
-        guard let currentCategory = self.selectedCategory else {return}
+        guard let item = todoItems?[indexPath.row] else {return}
         do {
-            try self.realm.write({
-                currentCategory.items.remove(at: indexPath.row)
-            })
+            try realm.write{realm.delete(item)}
         } catch {
             TDLLog("Error saving context \(error)")
         }

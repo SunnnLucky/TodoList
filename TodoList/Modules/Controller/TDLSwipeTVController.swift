@@ -38,7 +38,6 @@ class TDLSwipeTVController: TDLBaseTVController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellID) as! SwipeTableViewCell
         cell.delegate = self
-        cell.backgroundColor = .randomFlat()
         return cell
     }
 }

@@ -41,6 +41,7 @@ class TDLCategoryController: TDLSwipeTVController {
             guard let text = alert.textFields?.first?.text else {return}
             let newCategory = Category()
             newCategory.name = text
+            newCategory.colorHex = UIColor.randomFlat().hexValue()
             self.saveCategoryData(newCategory)
             self.tableView.reloadData()
             /* core data
@@ -110,7 +111,10 @@ extension TDLCategoryController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        cell.textLabel?.text = categories?[indexPath.row].name ?? "none"
+        if let model = categories?[indexPath.row] {
+            cell.textLabel?.text = model.name
+            cell.backgroundColor = .init(hexString: model.colorHex)
+        }
         return cell
     }
     

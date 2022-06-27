@@ -8,6 +8,7 @@
 import UIKit
 //import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class TDLTodoListController: TDLSwipeTVController {
     
@@ -173,7 +174,12 @@ extension TDLTodoListController {
         guard let model = todoItems?[indexPath.row] else {return cell}
         cell.textLabel?.text = model.title
         cell.accessoryType = model.done ? .checkmark : .none
-        cell.backgroundColor = UIColor(hexString: model.colorHex)
+        let percentage = CGFloat(indexPath.row) / CGFloat(todoItems!.count)
+        let bgColor = UIColor(hexString: selectedCategory!.colorHex)
+        if let color = bgColor?.darken(byPercentage:percentage) {
+            cell.backgroundColor = color
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+        }
         return cell
     }
     

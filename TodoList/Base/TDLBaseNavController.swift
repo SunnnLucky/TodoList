@@ -17,12 +17,15 @@ class TDLBaseNavController: UINavigationController {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = .systemBlue
-        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+//        appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+        appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
         
+        navigationBar.prefersLargeTitles = true
         navigationBar.tintColor = .white
         navigationBar.standardAppearance = appearance;
         navigationBar.scrollEdgeAppearance = appearance
         navigationBar.isTranslucent = false
+
         // 与scrollEdgeAppearance保持一致
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
     }

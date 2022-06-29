@@ -26,6 +26,7 @@ class TDLTodoListController: TDLSwipeTVController {
     
     lazy var searchBar : UISearchBar = {
         let bar = UISearchBar()
+        bar.searchTextField.backgroundColor = .white
         bar.delegate = self
         return bar
     }()

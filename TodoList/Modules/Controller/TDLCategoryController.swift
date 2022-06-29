@@ -8,6 +8,7 @@
 import UIKit
 //import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class TDLCategoryController: TDLSwipeTVController {
     
@@ -113,7 +114,9 @@ extension TDLCategoryController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let model = categories?[indexPath.row] {
             cell.textLabel?.text = model.name
+            let color = UIColor(hexString: model.colorHex)!
             cell.backgroundColor = UIColor(hexString: model.colorHex)
+            cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
         }
         return cell
     }

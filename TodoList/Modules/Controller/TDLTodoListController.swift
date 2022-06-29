@@ -34,13 +34,13 @@ class TDLTodoListController: TDLSwipeTVController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Items"
         configureSubView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         if let colorHex = selectedCategory?.colorHex {
+            title = selectedCategory?.name
             navigationController?.navigationBar.standardAppearance.backgroundColor = UIColor(hexString: colorHex)
             navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = UIColor(hexString: colorHex)
         }
@@ -49,6 +49,7 @@ class TDLTodoListController: TDLSwipeTVController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let _ = selectedCategory?.colorHex {
+            title = "Todoey"
             navigationController?.navigationBar.standardAppearance.backgroundColor = .systemBlue
             navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .systemBlue
         }

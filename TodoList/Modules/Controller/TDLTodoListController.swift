@@ -14,7 +14,7 @@ class TDLTodoListController: TDLSwipeTVController {
     
     //MARK: - Property
     let realm = try! Realm()
-//    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    //    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     //let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
     
     var todoItems: Results<Item>?
@@ -38,7 +38,24 @@ class TDLTodoListController: TDLSwipeTVController {
         configureSubView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let colorHex = selectedCategory?.colorHex {
+            navigationController?.navigationBar.standardAppearance.backgroundColor = UIColor(hexString: colorHex)
+            navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = UIColor(hexString: colorHex)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let _ = selectedCategory?.colorHex {
+            navigationController?.navigationBar.standardAppearance.backgroundColor = .systemBlue
+            navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .systemBlue
+        }
+    }
+    
     func configureSubView() {
+        
         tableView.sectionHeaderTopPadding = 0.0
         tableView.backgroundColor = #colorLiteral(red: 0.9306189418, green: 0.7211485505, blue: 0, alpha: 1)
         
@@ -56,15 +73,15 @@ class TDLTodoListController: TDLSwipeTVController {
     }
     
     //MARK: - Realm
-//    func saveItemData(_ item: Item) {
-//        do {
-//            try realm.write {
-//                realm.add(item)
-//            }
-//        } catch {
-//            TDLLog("Error saving context \(error)")
-//        }
-//    }
+    //    func saveItemData(_ item: Item) {
+    //        do {
+    //            try realm.write {
+    //                realm.add(item)
+    //            }
+    //        } catch {
+    //            TDLLog("Error saving context \(error)")
+    //        }
+    //    }
     
     func loadItemList() {
         todoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
@@ -72,60 +89,60 @@ class TDLTodoListController: TDLSwipeTVController {
     
     func searchTodoList(with text : String) {
         todoItems = todoItems?.filter("title CONTAINS[cd] %@", text).sorted(byKeyPath: "dateCreated", ascending: true)
-//        let request : NSFetchRequest<Item> = Item.fetchRequest()
-//        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
-//        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
-//
-//        loadTodoList(with: request, predicate: predicate)
+        //        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        //        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
+        //        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
+        //
+        //        loadTodoList(with: request, predicate: predicate)
     }
     
     //MARK: - Data Base
     /*
-    func saveTodoListData() {
-        // let encoder = PropertyListEncoder()
-        do {
-            //let data = try encoder.encode(itemArray)
-            //guard let url = dataFilePath else {return}
-            //try data.write(to: url)
-            try context.save()
-        } catch {
-            TDLLog("Error saving context \(error)")
-        }
-    }
-    
-    func loadTodoList(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-        let matchesPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
-        if let addtionalPredicate = predicate {
-            request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [addtionalPredicate,matchesPredicate])
-        } else {
-            request.predicate = matchesPredicate
-        }
-
-        do {
-            itemArray = try context.fetch(request)
-        } catch {
-            TDLLog("Error fetching data from context \(error)")
-        }
-        
-        /*
-         guard let url = dataFilePath else {return}
-         guard let data = try? Data(contentsOf: url) else {return}
-         let decoder = PropertyListDecoder()
-         do {
-         itemArray = try decoder.decode([TodoList].self, from: data)
-         } catch {
-         TDLLog("decoder fail \(error)")
-         }
-         */
-    }
-    
-    func searchTodoList(with text : String) {
-        let request : NSFetchRequest<Item> = Item.fetchRequest()
-        let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
-        request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
-        
-        loadTodoList(with: request, predicate: predicate)
-    }
+     func saveTodoListData() {
+     // let encoder = PropertyListEncoder()
+     do {
+     //let data = try encoder.encode(itemArray)
+     //guard let url = dataFilePath else {return}
+     //try data.write(to: url)
+     try context.save()
+     } catch {
+     TDLLog("Error saving context \(error)")
+     }
+     }
+     
+     func loadTodoList(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+     let matchesPredicate = NSPredicate(format: "parentCategory.name MATCHES %@", selectedCategory!.name!)
+     if let addtionalPredicate = predicate {
+     request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [addtionalPredicate,matchesPredicate])
+     } else {
+     request.predicate = matchesPredicate
+     }
+     
+     do {
+     itemArray = try context.fetch(request)
+     } catch {
+     TDLLog("Error fetching data from context \(error)")
+     }
+     
+     /*
+      guard let url = dataFilePath else {return}
+      guard let data = try? Data(contentsOf: url) else {return}
+      let decoder = PropertyListDecoder()
+      do {
+      itemArray = try decoder.decode([TodoList].self, from: data)
+      } catch {
+      TDLLog("decoder fail \(error)")
+      }
+      */
+     }
+     
+     func searchTodoList(with text : String) {
+     let request : NSFetchRequest<Item> = Item.fetchRequest()
+     let predicate = NSPredicate(format: "text CONTAINS[cd] %@", text)
+     request.sortDescriptors = [NSSortDescriptor(key: "text", ascending: true)]
+     
+     loadTodoList(with: request, predicate: predicate)
+     }
      */
     
     //MARK: - Add New Items
@@ -199,7 +216,7 @@ extension TDLTodoListController {
         } catch {
             TDLLog("Error saving context \(error)")
         }
-
+        
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

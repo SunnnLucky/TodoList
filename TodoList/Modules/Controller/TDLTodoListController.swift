@@ -41,8 +41,18 @@ class TDLTodoListController: TDLSwipeTVController {
         super.viewWillAppear(animated)
         if let colorHex = selectedCategory?.colorHex {
             title = selectedCategory?.name
-            navigationController?.navigationBar.standardAppearance.backgroundColor = UIColor(hexString: colorHex)
-            navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = UIColor(hexString: colorHex)
+            searchBar.barTintColor = UIColor(hexString: colorHex)
+            guard let navBar =  navigationController?.navigationBar else {return}
+            guard let color = UIColor(hexString: colorHex) else {return}
+            let appearance = navBar.standardAppearance
+            let textColor = ContrastColorOf(color, returnFlat: true)
+            appearance.backgroundColor = color
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : textColor]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : textColor]
+            
+            navBar.tintColor = textColor
+            navBar.standardAppearance = appearance
+            navBar.scrollEdgeAppearance = appearance
         }
     }
     
@@ -50,8 +60,15 @@ class TDLTodoListController: TDLSwipeTVController {
         super.viewWillDisappear(animated)
         if let _ = selectedCategory?.colorHex {
             title = "Todoey"
-            navigationController?.navigationBar.standardAppearance.backgroundColor = .systemBlue
-            navigationController?.navigationBar.scrollEdgeAppearance?.backgroundColor = .systemBlue
+            guard let navBar =  navigationController?.navigationBar else {return}
+            let appearance = navBar.standardAppearance
+            appearance.backgroundColor = .systemBlue
+            appearance.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            appearance.largeTitleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.white]
+            
+            navBar.tintColor = .white
+            navBar.standardAppearance = appearance
+            navBar.scrollEdgeAppearance = appearance
         }
     }
     
